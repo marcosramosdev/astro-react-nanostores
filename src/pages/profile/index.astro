@@ -1,0 +1,61 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { profiles, addProfile } from "../../stores/profile";
+
+async function addNewProfile() {
+  if (Astro.request.method === "POST") {
+    const formData = await Astro.request.formData();
+    const name = formData.get("name");
+    const age = formData.get("age");
+    const email = formData.get("email");
+    addProfile({ name, age, email });
+  }
+}
+
+export async function onRequest(context) {
+  await addNewProfile();
+}
+
+const profileList = profiles.get();
+---
+
+<Layout>
+  <div>
+    <h1>profiles</h1>
+    <div class="profile-list">
+      {
+        profileList.map((profile) => {
+          return <p>{profile.name}</p>;
+        })
+      }
+    </div>
+
+    <form method="POST" enctype="application/x-www-form-urlencoded">
+      <input type="text" name="name" placeholder="name" />
+      <input type="number" name="age" placeholder="age" />
+      <input type="email" name="email" placeholder="email" />
+      <button type="submit">add profile</button>
+    </form>
+  </div>
+</Layout>
+
+<style>
+  body {
+    background-color: #fff;
+    color: #333;
+  }
+
+  div {
+    display: flex;
+    padding: 20px;
+  }
+
+  .profile-list {
+    display: flex;
+    flex-direction: column;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+</style>
