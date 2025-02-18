@@ -1,11 +1,52 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import { Cart } from "../components/Cart";
+import { Product } from "../components/Product";
+import Layout from "../layouts/Layout.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const products = [
+  { id: 1, name: "Notebook", price: 2500 },
+  { id: 2, name: "Mouse Gamer", price: 150 },
+  { id: 3, name: "Teclado Mecânico", price: 300 },
+];
 ---
 
 <Layout>
-	<Welcome />
+  <div class="container">
+    <h1>Astro nanostores + react ecom simulation</h1>
+    <div class="products-cart">
+      <div class="products">
+        {
+          products.map((product, i) => (
+            <Product product={product} key={i} client:visible />
+          ))
+        }
+      </div>
+      <Cart client:visible />
+    </div>
+  </div>
 </Layout>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    width: 30rem;
+    margin: 3rem auto;
+    background-color: #eee;
+    color: #333;
+    border-radius: 20px;
+  }
+  h1 {
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .products-cart {
+    display: grid;
+    justify-items: center;
+    grid-template-columns: 1fr 1fr;
+  }
+</style>
